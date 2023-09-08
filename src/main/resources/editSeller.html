@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Seller</title>
+</head>
+<body>
+<h1>Edit Seller</h1>
+<form th:object="${seller}" th:action="@{/seller/save}" method="post">
+    <input type="hidden" th:field="*{sellerId}" />
+    <label>Name:</label>
+    <input type="text" th:field="*{sellerName}" /><br/>
+    <label>Address:</label>
+    <input type="text" th:field="*{sellerAddress}" /><br/>
+    <label>Phone:</label>
+    <input type="text" th:field="*{sellerPhone}" /><br/>
+    <label>Email:</label>
+    <input type="text" th:field="*{sellerEmail}" /><br/>
+    <label>Website:</label>
+    <input type="text" th:field="*{sellerWebsite}" /><br/>
+
+
+    <button type="submit">Save</button>
+</form>
+<a href="/sellers">Back to List</a>
+</body>
+</html>

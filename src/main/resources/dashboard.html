@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invoice Dashboard</title>
+    <style>
+        .pagination {
+            list-style-type: none;
+            display: inline-block;
+            margin: 10px 0;
+            padding: 0;
+        }
+
+        .pagination li {
+            display: inline;
+            margin-right: 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Invoice Dashboard</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Invoice Number</th>
+        <th>Invoice Date</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="invoice : ${invoices}">
+        <td th:text="${invoice.invoiceNumber}"></td>
+        <td th:text="${invoice.invoiceDate}"></td>
+        <td>
+            <a th:href="@{/invoices/{id}(id=${invoice.id})}">View</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${totalPages > 1}">
+    <ul class="pagination">
+        <li th:if="${currentPage > 0}">
+            <a th:href="@{/dashboard(page=0)}">First</a>
+        </li>
+        <li th:if="${currentPage > 0}">
+            <a th:href="@{/dashboard(page=${currentPage - 1})}">Previous</a>
+        </li>
+        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/dashboard(page=${pageNum})}" th:class="${pageNum == currentPage ? 'active' : ''}"
+               th:text="${pageNum + 1}"></a>
+        </li>
+        <li th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/dashboard(page=${currentPage + 1})}">Next</a>
+        </li>
+        <li th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/dashboard(page=${totalPages - 1})}">Last</a>
+        </li>
+    </ul>
+
+</div>
+</body>
+</html>

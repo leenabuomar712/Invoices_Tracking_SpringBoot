@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Please upload your files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #upload-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #upload-button:hover {
+            background-color: #0056b3;
+        }
+
+        #file-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h1>Please upload your files</h1>
+    <label for="fileupload">Choose files</label>
+    <input id="fileupload" type="file" name="fileupload" multiple />
+    <button id="upload-button" onclick="uploadFiles()">Upload</button>
+    <div id="file-list"></div>
+</div>
+
+<script>
+    async function uploadFiles() {
+        let formData = new FormData();
+        // Get all selected files
+        let files = fileupload.files;
+        // Append each selected file to the formData
+        for (let i = 0; i < files.length; i++) {
+            formData.append("files", files[i]);
+        }
+
+        // Display selected files' info
+        let fileListDiv = document.getElementById("file-list");
+        fileListDiv.innerHTML = "";
+        fileListDiv.innerHTML += "<p>Number of selected files: " + files.length + "</p>";
+        fileListDiv.innerHTML += "<p>Selected files:</p>";
+        for (let i = 0; i < files.length; i++) {
+            fileListDiv.innerHTML += "<p>" + files[i].name + "</p>";
+        }
+
+        let response = await fetch('/upload', {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.status === 200) {
+            alert("Files successfully uploaded.");
+        }
+    }
+</script>
+</body>
+</html>

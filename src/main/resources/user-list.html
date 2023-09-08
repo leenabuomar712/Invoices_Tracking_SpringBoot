@@ -1,0 +1,24 @@
+<!-- user-list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<ul id="userList">
+    <!-- User list will be displayed here -->
+</ul>
+
+<script>
+    $(document).ready(function() {
+        $.get("/api/users", function(data) {
+            var userList = $("#userList");
+            data.forEach(function(user) {
+                userList.append("<li>" + user.name + " (" + user.username + ")</li>");
+            });
+        });
+    });
+</script>
+</body>
+</html>

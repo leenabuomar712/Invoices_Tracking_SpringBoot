@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Invoice Data</h1>
+<table id="invoiceTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>InvoiceNumber</th>
+        <th>DateCreated</th>
+        <th>DateModified</th>
+        <th>InvoiceDate</th>
+        <th>DueDate</th>
+        <th>CustomDate</th>
+        <th>Subtotal</th>
+        <th>Taxes</th>
+        <th>Discounts</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Invoice data will be populated here -->
+    </tbody>
+</table>
+<script>
+    // Load invoice data using AJAX when the page loads
+    $(document).ready(function () {
+        loadInvoiceData();
+    });
+
+    function loadInvoiceData() {
+        $.ajax({
+            url: 'http://localhost:8080',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                populateInvoiceTable(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching invoice data:', error);
+            }
+        });
+    }
+
+    function populateInvoiceTable(data) {
+        var tableBody = $('#invoiceTable tbody');
+        tableBody.empty();
+
+        data.forEach(function (invoice) {
+            var row = '<tr>';
+            row += '<td>' + invoice.id + '</td>';
+            row += '<td>' + invoice.title + '</td>';
+            row += '<td>' + invoice.description + '</td>';
+            row += '<td>' + invoice.invoice_number + '</td>';
+            row += '<td>' + invoice.dateCreated + '</td>';
+            row += '<td>' + invoice.dateModified + '</td>';
+            row += '<td>' + invoice.invoiceDate + '</td>';
+            row += '<td>' + invoice.dueDate + '</td>';
+            row += '<td>' + invoice.customDate + '</td>';
+            row += '<td>' + invoice.subtotal + '</td>';
+            row += '<td>' + invoice.taxes + '</td>';
+            row += '<td>' + invoice.discounts + '</td>';
+            row += '<td>' + invoice.user.username + '</td>'; // Assuming user has a 'username' property
+            row += '<td>' + invoice.seller.sellerName + '</td>';
+            row += '</tr>';
+            tableBody.append(row);
+        });
+    }
+</script>
+</body>
+</html>

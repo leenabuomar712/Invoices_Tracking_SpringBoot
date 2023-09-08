@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Invoice Attachments</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>Invoice Attachments</h1>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Invoice ID</th>
+    <th>File Name</th>
+    <th>File Type</th>
+  </tr>
+  <?php
+        $servername = "your_server_name";
+        $username = "your_username";
+        $password = "your_password";
+        $dbname = "task2"; // Your database name
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+  }
+
+  $sql = "SELECT * FROM invoice_attachment";
+  $result = $conn->query($sql);
+
+  if ($result->num_rows > 0) {
+  while ($row = $result->fetch_assoc()) {
+  echo "<tr>
+  <td>" . $row["id"] . "</td>
+  <td>" . $row["invoice_id"] . "</td>
+  <td>" . $row["file_name"] . "</td>
+  <td>" . $row["file_type"] . "</td>
+</tr>";
+  }
+  } else {
+  echo "<tr><td colspan='4'>No invoice attachments found.</td></tr>";
+  }
+
+  $conn->close();
+  ?>
+</table>
+</body>
+</html>
