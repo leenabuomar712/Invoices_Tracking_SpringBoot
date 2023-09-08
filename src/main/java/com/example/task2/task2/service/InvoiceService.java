@@ -52,19 +52,14 @@ public class InvoiceService {
         return invoiceRepository.save(invoice);
     }
 
-
-
     public Optional<Invoice> updateInvoice(Long id, Invoice updatedInvoice) {
-        // Check if the invoice with the given ID exists
         Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
 
         if (existingInvoice.isPresent()) {
-            // Update the existing invoice with the new data
             updatedInvoice.setId(existingInvoice.get().getId());
             Invoice updated = invoiceRepository.save(updatedInvoice);
-            return Optional.of(invoiceRepository.save(updatedInvoice));
+            return Optional.of(updated);
         } else {
-            // If the invoice does not exist, return a 404 Not Found response
             throw new NotFoundException("Invoice not found with id: " + id);
         }
     }
@@ -84,35 +79,18 @@ public class InvoiceService {
 //    }
 
     //for searching:  request parameter
-
-
     public boolean deleteInvoice(Long id) {
-
         if (!invoiceRepository.existsById(id)) {
-
             throw new NotFoundException("Invoice not found with id: " + id);
         }
 
-        //to handle all the possible errors
         try {
             invoiceRepository.deleteById(id);
-            return true;
+            return true; // Deletion was successful
         } catch (Exception e) {
-            return false;
+            return false; // Deletion failed
         }
     }
-
-
-//
-//    public List<Invoice> getAllInvoicesWithSorting(String field){
-//        return invoiceRepository.findAll(Sort.by(Sort.Direction.ASC, field));
-//    }
-//
-//    public Page<Invoice> getAllInvoicesWithPagination(int offset, int pagesize){
-//        Page<Invoice> invoices = invoiceRepository.findAll(PageRequest.of(offset, pagesize));
-//        return invoices;
-//
-//    }
 
 
     public Page<Invoice> getAllInvoicesPaginated(Pageable pageable) {
@@ -123,3 +101,13 @@ public class InvoiceService {
     }
 
 }
+//
+//    public List<Invoice> getAllInvoicesWithSorting(String field){
+//        return invoiceRepository.findAll(Sort.by(Sort.Direction.ASC, field));
+//    }
+//
+//    public Page<Invoice> getAllInvoicesWithPagination(int offset, int pagesize){
+//        Page<Invoice> invoices = invoiceRepository.findAll(PageRequest.of(offset, pagesize));
+//        return invoices;
+//
+//    }

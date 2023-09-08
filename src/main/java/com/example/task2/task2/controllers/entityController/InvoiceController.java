@@ -1,5 +1,6 @@
 package com.example.task2.task2.controllers.entityController;
 
+import com.example.task2.task2.ConcreteErrorResponse;
 import com.example.task2.task2.NotFoundException;
 import com.example.task2.task2.controllers.DTOs.InvoiceDTO;
 import com.example.task2.task2.controllers.DTOs.InvoicesByIdDTO;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -85,7 +84,6 @@ public class InvoiceController {
         }
     }
 
-
     @PostMapping
     public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody @Valid InvoiceDTO invoiceDTO) {
         // Convert DTO to entity
@@ -101,32 +99,39 @@ public class InvoiceController {
     }
 
 
-
     // change the request for DTO
     // change the response for DTO
     // TODO: id should always be sent as path variable
     // todo: path variable vs request parameter
     @PutMapping("/{id}")
-    public ResponseEntity<InvoiceDTO> updateInvoice(@PathVariable long id, @RequestBody InvoiceDTO invoiceDto) {
+    public ResponseEntity<?> updateInvoice(@PathVariable long id, @RequestBody InvoiceDTO invoiceDto) {
 
         // convert DTO to Entity
         Invoice invoiceRequest = modelMapper.map(invoiceDto, Invoice.class);
 
-        Optional<Invoice> invoice = invoiceService.updateInvoice(id, invoiceRequest);
+        try {
+            Optional<Invoice> invoice = invoiceService.updateInvoice(id, invoiceRequest);
 
-        // entity to DTO
-        InvoiceDTO invoiceResponse = modelMapper.map(invoice, InvoiceDTO.class);
-        return ok().body(invoiceResponse);
+            InvoiceDTO invoiceResponse = modelMapper.map(invoice, InvoiceDTO.class);
+            return new ResponseEntity<>(invoiceResponse, HttpStatus.OK);
+        } catch (NotFoundException ex) {
+            return invoiceService.handleInvoiceNotFoundException(id);
+        }
+
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteInvoice(@PathVariable(name = "id") Long id) {
-        var isRemoved = invoiceService.deleteInvoice(id);
-        if (!isRemoved) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); //404
+    public ResponseEntity<?> deleteInvoice(@PathVariable(name = "id") Long id) {
+        try {
+            invoiceService.deleteInvoice(id);
+            return ResponseEntity.noContent().build(); // 204 successful with empty body
+        } catch (NotFoundException ex) {
+            ConcreteErrorResponse errorResponse = new ConcreteErrorResponse(404, "Not Found", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(errorResponse); // 404 not found with JSON error response
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT); //204 successful
     }
 
     private Sort getSort(String sort) {

@@ -31,10 +31,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
-    @ExceptionHandler({NotFoundException.class})
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Not Found", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+
 
     @ExceptionHandler({ConflictException.class})
     public ResponseEntity<String> handleConflictException(ConflictException ex) {
@@ -61,6 +63,13 @@ public class GlobalExceptionHandler {
 //    public ResponseEntity<ErrorResponse> handleMyCustomException(BadRequestException ex) {
 //        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
 //        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
+
+
+
+//    @ExceptionHandler({NotFoundException.class})
+//    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 //    }
 
 
