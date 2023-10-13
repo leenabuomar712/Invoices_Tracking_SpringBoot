@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    // URL to fetch roles from your Spring Boot API
+
+    // URL to fetch roles from the Spring Boot API
     const rolesUrl = '/role';
 
     // Select the <ul> element to populate the roles
@@ -13,7 +14,7 @@ $(document).ready(function () {
     // Fetch roles from the API and populate in the <ul> element
     $.ajax({
         url: rolesUrl,
-        method: 'GET',
+        method: 'POST',
         success: function (roles) {
             roles.forEach(function (role) {
                 appendRole(role);
