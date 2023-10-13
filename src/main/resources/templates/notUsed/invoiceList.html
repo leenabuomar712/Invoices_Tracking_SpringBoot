@@ -45,7 +45,10 @@
 
     function fetchInvoices() {
         // Send AJAX request to fetch invoice data
-        fetch('/invoices')
+        fetch('/invoices'),{
+            method: 'GET'
+
+        }
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector('tbody');

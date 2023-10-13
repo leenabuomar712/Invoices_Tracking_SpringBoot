@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoices</title>
+    <title>Invoices</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Invoices</h1>
+</header>
+<div class="container" id="invoice-container">
+    <!-- Invoices will be displayed here -->
+</div>
+
+<!-- JavaScript code -->
+<script>
+    // Function to fetch and display invoices
+    function fetchInvoices() {
+        // Make a GET request to your API endpoint
+        fetch('/api/auth/invoices')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Assuming the API response returns an array of invoices
+                const invoices = data.content;
+
+                // Get the container element
+                const invoiceContainer = document.getElementById('invoice-container');
+
+                // Clear the existing content
+                invoiceContainer.innerHTML = '';
+
+                // Loop through the invoices and create elements to display them
+                invoices.forEach(invoice => {
+                    const invoiceDiv = document.createElement('div');
+                    invoiceDiv.classList.add('invoice');
+
+                    const invoiceTitle = document.createElement('h2');
+                    invoiceTitle.textContent = `Invoice ID: ${invoice.id}`;
+
+                    const invoiceInfo = document.createElement('p');
+                    invoiceInfo.textContent = `Title: ${invoice.title}, Description: ${invoice.description}`;
+
+                    invoiceDiv.appendChild(invoiceTitle);
+                    invoiceDiv.appendChild(invoiceInfo);
+                    invoiceContainer.appendChild(invoiceDiv);
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem fetching the invoices:', error);
+            });
+    }
+
+    // Call the fetchInvoices function when the page loads
+    window.addEventListener('load', fetchInvoices);
+</script>
+</body>
+</html>

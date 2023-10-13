@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice Upload</title>
+</head>
+<body>
+<h1>Create Invoice</h1>
+
+<form id="invoiceForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea><br>
+
+    <label for="invoiceNumber">Invoice Number:</label>
+    <input type="text" id="invoiceNumber" name="invoiceNumber" required><br>
+
+    <label for="invoiceDate">Invoice Date:</label>
+    <input type="date" id="invoiceDate" name="invoiceDate" required><br>
+
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate" required><br>
+
+    <label for="subtotal">Subtotal:</label>
+    <input type="number" step="0.01" id="subtotal" name="subtotal" required><br>
+
+    <label for="taxes">Taxes:</label>
+    <input type="number" step="0.01" id="taxes" name="taxes"><br>
+
+    <label for="discounts">Discounts:</label>
+    <input type="number" step="0.01" id="discounts" name="discounts"><br>
+
+    <label for="userId">User ID:</label>
+    <input type="number" id="userId" name="userId" required><br>
+
+    <label for="attachment">Attachment:</label>
+    <input type="file" id="attachment" name="attachment"><br>
+
+    <button type="button" onclick="createInvoice()">Create Invoice</button>
+</form>
+
+<div id="response"></div>
+
+<script src="invoice_upload.js"></script>
+</body>
+</html>
